@@ -1,0 +1,14 @@
+<div class="row" style=" margin-top:15px;">
+    <div class="col-lg-4" ng-repeat="fl in knowledgeList" style="height: 350px;width: 400px;margin-left: 2%;">
+        <img class="img-circle" ng-src="{{knowledgePrefix}}{{knowledgeList[$index].img}}" style="width: 140px; height: 140px;display:block;margin: 0 auto;">
+        <h2 style="font-size: 15px;line-height: 25px;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow: hidden;">{{fl.description}}</h2>
+        <p style="text-align: center;"><a class="btn btn-primary" ui-sref="navbar.knowledgeDetail({id:fl.id})" role="button">了解更多...</a></p>
+    </div>
+    <!-- /.col-lg-4 -->
+</div>
+<!-- /.row -->
+<nav>
+    <ul class="pagination">
+        <li ng-repeat="page in pageCountList"><a href="#/navbar/knowledgeList/{{id}}/{{page}}">{{page}}</a></li>
+    </ul>
+</nav>

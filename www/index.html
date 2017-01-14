@@ -11,7 +11,22 @@
 
     <!-- Bootstrap core CSS -->
     <link href="./css/bootstrap.min.css" rel="stylesheet">
-
+   <style type="text/css">
+       html,body{
+           font-family: 'microsoft yahei';
+       }
+       *{
+        margin:0;
+        padding:0;
+       }
+       p{
+        margin:0 15px;
+       }
+     img{
+        display: block;
+        margin: 0 auto;
+      }
+   </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
@@ -49,58 +64,67 @@
     			templateUrl:'./template/home.html',
     			controller:'homeController'
     		})
-    		.state('navbar.foodList',{
-    			url:'/foodList/:id/:page',
-    			templateUrl:'./template/foodList.html',
-    			controller:'foodListController'
+    		.state('navbar.knowledgeList',{
+    			url:'/knowledgeList/:id/:page',
+    			templateUrl:'./template/knowledgeList.html',
+    			controller:'knowledgeListController'
     		})
-    		.state('navbar.foodDetail',{
-    			url:'/foodDetail/:id',
-    			templateUrl:'./template/foodDetail.html',
-    			controller:'foodDetailController'
+    		.state('navbar.knowledgeDetail',{
+    			url:'/knowledgeDetail/:id',
+    			templateUrl:'./template/knowledgeDetail.html',
+    			controller:'knowledgeDetailController'
     		})
     	})
     	.controller('navbarController',function($scope,$http){
     		$http({
-    			url:'http://localhost/food-categories.php'
+    			url:'http://localhost/knowledge-classify.php'
     		}).then(function(res){
+               /* console.log(res.data);*/
     			$scope.foodcategories = res.data.tngou;
     		})
     	})
     	.controller('homeController',function($scope){
-    		$scope.welcome = "欢迎来到健康大杂汇";
+    		$scope.welcome = "";
     	})
-    	.controller('foodListController',function($scope,$stateParams,$http){
+    	.controller('knowledgeListController',function($scope,$stateParams,$http,$rootScope){
+            $rootScope.knowledgePrefix = "http://tnfs.tngou.net/image";
     		$http({
-    			url:'http://localhost/food-list.php',
+    			url:'http://localhost/knowledge-list.php',
     			params:{
     				id:$stateParams.id,
     				page:$stateParams.page
     			}
     		}).then(function(res){
-    			$scope.foodList = res.data.tngou;
-    			console.log(res.data.tngou);
-    			var pageCountList = [];
+               console.log(res.data)
+    			$scope.knowledgeList = res.data.tngou;
+    			
+    			var pageCountList = []; 
     			var rows = 9;
 
     			for(var i=1;i<=Math.ceil(res.data.total/rows); i++){
     				pageCountList.push(i);
     			}
     			$scope.id = $stateParams.id;
-    			$scope.pageLCountist = pageCountList;
+    			$scope.pageCountList = pageCountList;
     		})
     	})
-    	.controller('foodDetailController',function($scope,$stateParams,$http){
+    	.controller('knowledgeDetailController',function($scope,$stateParams,$http){
+           
     		$http({
-    			url:'http://localhost/food-detail.php',
+    			url:'http://localhost/knowledge-detail.php',
     			params:{
     				id:$stateParams.id
     			}
-    		}).then(function(res){
-    			$scope.detail = res.data;
-    			console.log(res);
+    		}).then(function(res){               
+    			$scope.knowledgeDetail = res.data;
+    			
     		})
     	})
+        .filter("myFilter", function ($sce) {
+            return function (input) {
+                return $sce.trustAsHtml(input);
+            }
+        })
     </script>
 
   </body>
