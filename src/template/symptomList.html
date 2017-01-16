@@ -1,0 +1,37 @@
+<div class="container marketing">
+    <!-- Three columns of text below the carousel -->
+    <div class="row" ng-repeat="symptom in symptomLists" ng-if="$index % 3 == 0">
+        <div class="col-lg-4" ng-if="symptomLists[$index].id != undefined">
+            <img class="img-circle" ng-src="{{imgPrefix}}{{symptomLists[$index].img}}" alt="{{symptomLists[$index].keywords}}" style="width: 140px; height: 140px;">
+            <h2>{{symptomLists[$index].name}}</h2>
+            <p>{{symptomLists[$index].description | limitTo:100}}</p>
+            <p>
+                <!-- <a class="btn btn-default" href="#/navbar/symptomDetail/{{symptomLists[$index].id}}" role="button">查看详情 &raquo;</a> -->
+                <a class="btn btn-default" ui-sref="navbar.symptomDetail({id:symptomLists[$index].id})" role="button">查看详情 &raquo;</a>
+            </p>
+        </div>
+        <!-- /.col-lg-4 -->
+        <div class="col-lg-4" ng-if="symptomLists[$index+1].id != undefined">
+            <img class="img-circle" ng-src="{{imgPrefix}}{{symptomLists[$index+1].img}}" alt="{{symptomLists[$index+1].keywords}}" style="width: 140px; height: 140px;">
+            <h2>{{symptomLists[$index+1].name}}</h2>
+            <p>{{symptomLists[$index+1].description | limitTo:100}}</p>
+            <p><a class="btn btn-default" href="#/navbar/symptomDetail/{{symptomLists[$index+1].id}}" role="button">查看详情 &raquo;</a></p>
+        </div>
+        <!-- /.col-lg-4 -->
+        <div class="col-lg-4" ng-if="symptomLists[$index+2].id != undefined">
+            <img class="img-circle" ng-src="{{imgPrefix}}{{symptomLists[$index+2].img}}" alt="{{symptomLists[$index+2].keywords}}" style="width: 140px; height: 140px;">
+            <h2>{{symptomLists[$index+2].name}}</h2>
+            <p>{{symptomLists[$index+2].description | limitTo:100}}</p>
+            <p><a class="btn btn-default" href="#/navbar/symptomDetail/{{symptomLists[$index+2].id}}" role="button">查看详情 &raquo;</a></p>
+        </div>
+        <!-- /.col-lg-4 -->
+    </div>
+    <!-- /.row -->
+    <nav>
+        <ul class="pagination">
+            <!-- <li ng-repeat="n in [] | range:symptomListsPageCount"><a href="#/navbar/symptomList/{{symptomCateID}}/{{n}}">{{n}}</a></li> -->
+            <li ng-repeat="p in pageCountList"><a href="#/navbar/symptomLists/{{id}}/{{p}}">{{p}}</a></li>
+        </ul>
+    </nav>
+    <nav>
+</div>

@@ -1,107 +1,114 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="health">
-  <head>
+<html lang="en" ng-app="healthyLife">
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>MusicCombo</title>
-
+    <title>HealthyLife</title>
     <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-  </head>
+</head>
 <!-- NAVBAR
 ================================================== -->
-  <body>
 
-  	<ui-view></ui-view>
-
+<body>
+    <ui-view></ui-view>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="js/jquery-1.11.3.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./js/angular.js"></script>
     <script type="text/javascript" src="./js/angular-ui-router.js"></script>
     <script type="text/javascript">
+    var healthApp = angular.module('healthyLife', ['ui.router'])
+        .run(function($rootScope) {
+            $rootScope.imgPrefix = "http://tnfs.tngou.net/image";
+        })
+        .config(function($stateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) {
 
-    	var healthApp =angular.module('health',['ui.router'])
-    	.config(function($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider){
-    		$urlRouterProvider.otherwise('/navbar/home');
-    		$urlMatcherFactoryProvider.caseInsensitive(true);
-    		$stateProvider
-    		.state('navbar',{
-    			url:'/navbar',
-    			templateUrl:'./template/navbar.html',
-    			controller:'navbarController'
-    		})
-    		.state('navbar.home',{
-    			url:'/home',
-    			templateUrl:'./template/home.html',
-    			controller:'homeController'
-    		})
-    		.state('navbar.foodList',{
-    			url:'/foodList/:id/:page',
-    			templateUrl:'./template/foodList.html',
-    			controller:'foodListController'
-    		})
-    		.state('navbar.foodDetail',{
-    			url:'/foodDetail/:id',
-    			templateUrl:'./template/foodDetail.html',
-    			controller:'foodDetailController'
-    		})
-    	})
-    	.controller('navbarController',function($scope,$http){
-    		$http({
-    			url:'http://localhost/food-categories.php'
-    		}).then(function(res){
-    			$scope.foodcategories = res.data.tngou;
-    		})
-    	})
-    	.controller('homeController',function($scope){
-    		$scope.welcome = "欢迎来到健康大杂汇";
-    	})
-    	.controller('foodListController',function($scope,$stateParams,$http){
-    		$http({
-    			url:'http://localhost/food-list.php',
-    			params:{
-    				id:$stateParams.id,
-    				page:$stateParams.page
-    			}
-    		}).then(function(res){
-    			$scope.foodList = res.data.tngou;
-    			console.log(res.data.tngou);
-    			var pageCountList = [];
-    			var rows = 9;
+            $urlRouterProvider.otherwise('/navbar/home');
+            $urlMatcherFactoryProvider.caseInsensitive(true);
 
-    			for(var i=1;i<=Math.ceil(res.data.total/rows); i++){
-    				pageCountList.push(i);
-    			}
-    			$scope.id = $stateParams.id;
-    			$scope.pageLCountist = pageCountList;
-    		})
-    	})
-    	.controller('foodDetailController',function($scope,$stateParams,$http){
-    		$http({
-    			url:'http://localhost/food-detail.php',
-    			params:{
-    				id:$stateParams.id
-    			}
-    		}).then(function(res){
-    			$scope.detail = res.data;
-    			console.log(res);
-    		})
-    	})
+            $stateProvider
+                .state('navbar', {
+                    url: '/navbar',
+                    templateUrl: './template/navbar.html',
+                    controller: 'navbarController'
+                })
+                .state('navbar.home', {
+                    url: '/home',
+                    templateUrl: './template/home.html',
+                    controller: 'homeController'
+                })
+                .state('navbar.symptomList', {
+                    url: '/symptomList/:id/:page',
+                    templateUrl: './template/symptomList.html',
+                    controller: 'symptomListController'
+                })
+                .state('navbar.symptomDetail', {
+                    url: '/symptomDetail/:id',
+                    templateUrl: './template/symptomDetail.html',
+                    controller: 'symptomDetailController'
+                })
+        })
+        .filter("myFilter", function($sce) {
+            return function(input) {
+                return $sce.trustAsHtml(input);
+            }
+        })
+        .controller('navbarController', function($scope, $http) {
+            $http({
+                url: 'http://localhost/symptomCategories.php',
+            }).then(function(res) {
+                console.log(res)
+                $scope.symptomCates = res.data.tngou;
+            })
+        })
+        .controller('homeController', function($scope) {
+            $scope.welcome = "欢迎来到健康小助手之家";
+        })
+        .controller('symptomListController', function($scope, $stateParams, $http) {
+            $http({
+                url: 'http://localhost/symptomList.php',
+                params: {
+                    id: $stateParams.id,
+                    page: $stateParams.page
+                }
+            }).then(function(res) {
+                console.log(res);
+                $scope.symptomLists = res.data.list;
+                var pageCountList = [];
+                var rows = 15;
+
+                for (var i = 1; i <= Math.ceil(res.data.total / rows); i++) {
+                    pageCountList.push(i);
+                }
+                console.log(res)
+                $scope.id = $stateParams.id;
+                $scope.pageCountList = pageCountList;
+                console.log(pageCountList);
+            })
+        })
+        .controller('symptomDetailController', function($scope, $stateParams, $http) {
+            $http({
+                url: 'http://localhost/symptomDetail.php',
+                params: {
+                    id: $stateParams.id
+                }
+            }).then(function(res) {
+                $scope.symptomDetail = res.data;
+                console.log(res);
+            })
+        })
     </script>
+</body>
 
-  </body>
 </html>

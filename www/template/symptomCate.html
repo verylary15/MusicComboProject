@@ -1,6 +1,6 @@
 <div class="container marketing">
     <!-- Three columns of text below the carousel -->
-    <div class="row" ng-repeat="food in foodLists" ng-if="$index % 3 == 0">
+    <div class="row" ng-repeat="symptom in foodLists" ng-if="$index % 3 == 0">
         <div class="col-lg-4" ng-if="foodLists[$index].id != undefined">
             <img class="img-circle" ng-src="{{foodPrefix}}{{foodLists[$index].img}}" alt="{{foodLists[$index].keywords}}" style="width: 140px; height: 140px;">
             <h2>{{foodLists.name}}</h2>
